@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>2FA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.js"></script>
+  </head>
+  <body>
+    {% if access %}
+      <h3>Nice. You have access!</h3>
+    {% else %}
+    <form  action="" method="POST">
+      <input type="text" name="code">
+      <input type="submit" value="Submit">
+    </form>
+    <canvas id="qr"></canvas>
+    <script>
+      (function() {
+        var qr = new QRious({
+          element: document.getElementById('qr'),
+          value: '{{ qr }}',
+          size: 250
+        });
+      })();
+    </script>
+    {% endif %}
+  </body>
+</html>
