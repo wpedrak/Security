@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from functions import get_posts, get_friends
+from presenter.functions import get_posts, get_friends
 
 posts_token = None
 friends_token = None
