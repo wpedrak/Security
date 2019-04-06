@@ -1,11 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Oauth2 example</title>
+    <script>
+        // Load the SDK asynchronously
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '424004035067331',
+                // cookie     : true,  // enable cookies to allow the server to access 
+                // the session
+                xfbml: true,  // parse social plugins on this page
+                version: 'v3.2' // The Graph API version to use for the call
+            });
+        }
+
+        function logout() {
+            FB.logout(function (response) {
+                console.log('Log out');
+                console.log(response);
+            });
+        }
+    </script>
 </head>
+
 <body>
     <div>
         <a href={% url 'friends' %}>Friends</a>
@@ -15,5 +44,9 @@
         {% block content %}
         {% endblock %}
     </div>
+    <div>
+        <button onclick=logout()>Logout from Facebook</button>
+    </div>
 </body>
+
 </html>

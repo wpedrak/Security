@@ -1,17 +1,24 @@
 {% extends 'presenter/base.html' %}
 
 {% block content %}
+<script>
+    function displayFriends() {
+        FB.api('/me/friendlists', function(request) {
+            console.log('/me/friends')
+            console.log(request)
+            var friendsInApp = request.data.length
+            // var friendsInTotal = request.summary.total_count
+            var html = friendsInApp + ' of your friends installed this app'
+            document.getElementById('info').innerHTML = html
+        })
+    }
+</script>
 <div>
-<a href=#><button>Display friends</button></a>
+<fb:login-button scope="public_profile, user_friends" onlogin="displayFriends()">
+</fb:login-button>
 </div>
 <div>
     Friends:
-    <ul>
-        {% for friend in friends %}
-        <li>
-            ala
-        </li>
-        {% endfor %}
-    </ul>
+    <div id='info'></div>
 </div>
 {% endblock %}

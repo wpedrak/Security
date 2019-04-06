@@ -1,17 +1,28 @@
 {% extends 'presenter/base.html' %}
 
 {% block content %}
+<script>
+    function displayPosts() {
+        FB.api('/me/posts', function(request) {
+            console.log('/me/posts')
+            console.log(request)
+            var data = request.data
+            data = data.filter(elem => elem.message)
+            var html = ''
+            data.forEach( elem => {
+                html += '<li>' + elem.message + '</li>'
+            })
+            document.getElementById('list').innerHTML = html
+        })
+    }
+</script>
 <div>
-    <a href=#><button>Display posts</button></a>
+<fb:login-button scope="public_profile, user_posts" onlogin="displayPosts()">
+</fb:login-button>
 </div>
 <div>
     Posts:
-    <ul>
-        {% for post in posts %}
-            <li>
-                kot
-            </li>
-        {% endfor %}
+    <ul id='list'>
     </ul>
 </div>
 {% endblock %}
