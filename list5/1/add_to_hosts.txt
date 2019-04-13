@@ -1,0 +1,3 @@
+127.0.0.1       www.kogucik.pl
+127.0.0.1       www.kot.pl
+127.0.0.1       www.idp.pl
