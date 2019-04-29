@@ -28,4 +28,14 @@ INSERT INTO price(id, car, region, dealer, price) VALUES
 (2, 1, 1, 2, 500);
 
 INSERT INTO price(id, car, region, dealer, price) VALUES
-(3, 2, 1, 1, 2000);
+(1, 1, 1, 1, 999),
+(2, 1, 1, 2, 800);
+
+
+delete from price where id = 3;
+INSERT INTO price(id, car, region, dealer, price) VALUES
+(3, 1, 1, 1, 2000);
+
+select dealer_by_id(2);
+
+select * from price;

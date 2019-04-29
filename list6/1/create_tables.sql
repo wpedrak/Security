@@ -33,16 +33,19 @@ create table price (
     dealer INTEGER REFERENCES dealer ON DELETE CASCADE
 );
 
+DROP TRIGGER ensure_lower_price on price;
 DROP FUNCTION ensure_lower_price;
+
 CREATE FUNCTION ensure_lower_price() RETURNS trigger AS $$
 DECLARE
     price_in_region INTEGER;
 BEGIN
-    SELECT INTO price_in_region pr.price 
-    FROM region_price
-    WHERE car = NEW.car
-    AND   region = NEW.region;
+    SELECT rp.price INTO price_in_region
+    FROM region_price as rp
+    WHERE rp.car = NEW.car
+    AND   rp.region = NEW.region;
 
+    -- RAISE EXCEPTION '%, %', ;
 
     IF NEW.price >= price_in_region THEN
         RAISE EXCEPTION 'Price can not be worst than price in region';
@@ -51,6 +54,22 @@ BEGIN
 END
 $$ LANGUAGE 'plpgsql';
 
-DROP TRIGGER ensure_lower_price on price;
 CREATE TRIGGER ensure_lower_price BEFORE INSERT OR UPDATE ON price
     FOR EACH ROW EXECUTE PROCEDURE ensure_lower_price();
+
+DROP FUNCTION dealer_by_id;
+CREATE FUNCTION dealer_by_id(integer) RETURNS text AS $$
+DECLARE
+    result text;
+BEGIN
+    SELECT account into result
+    FROM dealer
+    WHERE id = $1;
+
+    RETURN result;
+END
+$$ LANGUAGE 'plpgsql';
+
+ALTER TABLE price ENABLE ROW LEVEL SECURITY;
+DROP POLICY price_policy ON price;
+CREATE POLICY price_policy ON price USING (dealer_by_id(dealer) = current_user);
