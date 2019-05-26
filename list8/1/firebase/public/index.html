@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/6.0.4/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/6.0.4/firebase-auth.js"></script>
+    <!-- <script defer src="/__/firebase/6.0.4/firebase-database.js"></script>
+    <script defer src="/__/firebase/6.0.4/firebase-messaging.js"></script> -->
+    <script defer src="/__/firebase/6.0.4/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+      <body>
+    <div id="message">
+      <h2 id="greet">Welcome. Log in to see cat.</h2>
+      <button id='signer'>sign in</button>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+          'login_hint': 'user@example.com'
+        });
+
+        var signIn = function() {
+          firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+          // console.log(user)
+          var storage = firebase.storage();
+          var storageRef = storage.ref();
+          var spaceRef = storageRef.child('nyan.jpg');
+          // console.log(spaceRef)
+          spaceRef.getDownloadURL().then(function(url) {
+              var img = document.createElement("img");
+              var att = document.createAttribute("src");
+              att.value = url;
+              img.setAttributeNode(att);
+              document.body.appendChild(img);
+          })
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          // ...
+        });
+      }
+
+      document.getElementById('signer').onclick = signIn
+      });
+    </script>
+  </body>
+</html>
